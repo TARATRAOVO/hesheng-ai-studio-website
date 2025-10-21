@@ -42,3 +42,18 @@ const SITE_CONFIG = {
     contactBtn.href = `mailto:${SITE_CONFIG.email}`;
   }
 })();
+
+// Mobile navigation toggle
+(() => {
+  const navToggle = document.getElementById('navToggle');
+  const siteNav = document.getElementById('siteNav');
+  if (!navToggle || !siteNav) return;
+  navToggle.addEventListener('click', () => {
+    const open = siteNav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  siteNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    siteNav.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+})();
