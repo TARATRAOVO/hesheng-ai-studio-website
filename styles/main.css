@@ -73,7 +73,9 @@ body {
 .nav-toggle { display: none; }
 
 /* Hero */
-.hero.section { display: grid; grid-template-columns: 1.12fr 0.88fr; gap: 28px; align-items: center; }
+.hero
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
 .eyebrow { display:inline-block; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: color-mix(in srgb, var(--primary) 18%, transparent); border: 1px solid var(--border); padding: 4px 8px; border-radius: 999px; margin-bottom: 8px; }
 .hero__content h1 { font-size: clamp(28px, 4.6vw, 46px); line-height: 1.08; margin: 0 0 12px; }
 .lead { color: var(--muted); margin: 0 0 20px; font-size: 16px; }

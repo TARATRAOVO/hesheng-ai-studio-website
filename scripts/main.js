@@ -57,3 +57,42 @@ const SITE_CONFIG = {
     navToggle.setAttribute('aria-expanded', 'false');
   }));
 })();
+
+// Smooth in-page anchor scrolling with header offset (more reliable on iOS/Safari)
+(() => {
+  const headerH = (() => {
+    const v = getComputedStyle(document.documentElement).getPropertyValue('--header-h');
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) ? n : 56;
+  })();
+  const offset = headerH + 12;
+  const scrollToId = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  };
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      if (!href || href === '#') { return; }
+      const id = href.slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      // Close mobile nav if open
+      const siteNav = document.getElementById('siteNav');
+      const navToggle = document.getElementById('navToggle');
+      if (siteNav && navToggle && siteNav.classList.contains('is-open')) {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+      scrollToId(id);
+      // Update URL hash without jumping
+      if (history.pushState) {
+        history.pushState(null, '', `#${id}`);
+      }
+    });
+  });
+})();
