@@ -26,7 +26,7 @@ themeToggle?.addEventListener('click', () => {
 // Example: centralized config for quick edits (brand, email, links)
 const SITE_CONFIG = {
   brand: '平乐合笙人工智能应用软件工作室',
-  email: 'hello@example.com', // TODO: 替换为你的正式联系邮箱
+  email: 'dipan.tang@foxmail.com', // TODO: 替换为你的正式联系邮箱
   links: {
     pricing: '#pricing',
     contact: '#contact',
