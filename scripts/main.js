@@ -37,9 +37,13 @@ const SITE_CONFIG = {
 (() => {
   const logoText = document.querySelector('.logo span');
   if (logoText) logoText.textContent = SITE_CONFIG.brand;
-  const contactBtn = document.querySelector('#contact .btn');
-  if (contactBtn && SITE_CONFIG.email) {
-    contactBtn.href = `mailto:${SITE_CONFIG.email}`;
+  // Preserve subject/body when replacing the mailto address
+  const mailBtn = document.querySelector('#contact a[href^="mailto:"]');
+  if (mailBtn && SITE_CONFIG.email) {
+    const href = mailBtn.getAttribute('href');
+    const qsIdx = href.indexOf('?');
+    const qs = qsIdx >= 0 ? href.slice(qsIdx) : '';
+    mailBtn.setAttribute('href', `mailto:${SITE_CONFIG.email}${qs}`);
   }
 })();
 
@@ -92,6 +96,56 @@ const SITE_CONFIG = {
       // Update URL hash without jumping
       if (history.pushState) {
         history.pushState(null, '', `#${id}`);
+      }
+    });
+  });
+})();
+
+// Highlight active nav item by section visibility
+(() => {
+  const nav = document.getElementById('siteNav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
+  const map = new Map();
+  links.forEach(a => {
+    const id = a.getAttribute('href')?.slice(1);
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el) map.set(id, a);
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const link = map.get(id);
+      if (!link) return;
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: [0, 0.2, 0.6] });
+  map.forEach((_, id) => {
+    const el = document.getElementById(id);
+    el && io.observe(el);
+  });
+})();
+
+// Copy to clipboard for contact info
+(() => {
+  const btns = document.querySelectorAll('[data-copy]');
+  if (!btns.length || !navigator.clipboard) return;
+  btns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-copy');
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        const old = btn.textContent;
+        btn.textContent = '已复制';
+        btn.disabled = true;
+        setTimeout(() => { btn.textContent = old; btn.disabled = false; }, 1400);
+      } catch (_) {
+        // no-op
       }
     });
   });
