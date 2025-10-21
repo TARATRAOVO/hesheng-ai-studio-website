@@ -1,6 +1,6 @@
 # 平乐合笙人工智能应用软件工作室 · 纯前端经营落地页
 
-在线预览：https://taratraovo.github.io/test_ai_website/
+在线预览：https://taratraovo.github.io/hesheng-ai-studio-website/
 
 一个可直接部署到 GitHub Pages 的纯前端静态网站模板，适合用作工作室/产品的“经营介绍页面”。模板内置响应式设计、SEO 元信息、深浅色主题切换，以及最少可维护的工程化（零构建、零依赖）。
 
